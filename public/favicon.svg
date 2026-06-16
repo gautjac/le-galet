@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#1c1d22" />
+  <defs>
+    <radialGradient id="g" cx="38%" cy="34%" r="72%">
+      <stop offset="0%" stop-color="#5a5650" />
+      <stop offset="55%" stop-color="#37352f" />
+      <stop offset="100%" stop-color="#222129" />
+    </radialGradient>
+  </defs>
+  <!-- a smooth river pebble -->
+  <ellipse cx="32" cy="34" rx="20" ry="15" fill="url(#g)" />
+  <ellipse cx="26" cy="28" rx="7" ry="3.4" fill="#cd9a5c" opacity="0.45" transform="rotate(-22 26 28)" />
+</svg>

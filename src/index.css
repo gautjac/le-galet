@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  /* Live accent — swapped between amber (day) and slate (night) by the engine. */
+  --accent: #cd9a5c;
+  --accent-soft: #e0c39b;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #1c1d22;
+  color: #d9d3c8;
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior: none;
+  /* The iPad sits propped up and idle — no text selection, no tap highlight. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Quotes are the soul of the display: humanist serif, large, airy. */
+.font-quote {
+  font-family: "Source Serif 4", Georgia, serif;
+}
+
+/* Hide scrollbars in the curation views — calm, chromeless. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Subtle vignette that the Galet view lays over everything. */
+.vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 120% 100% at 50% 45%,
+    transparent 52%,
+    rgba(10, 10, 13, 0.34) 100%
+  );
+}
+
+/* Ken Burns drift classes — bound to the slow keyframes in the config. */
+.drift-0 {
+  animation: drift0 var(--drift-dur, 26s) ease-in-out both;
+}
+.drift-1 {
+  animation: drift1 var(--drift-dur, 26s) ease-in-out both;
+}
+.drift-2 {
+  animation: drift2 var(--drift-dur, 26s) ease-in-out both;
+}
+.drift-3 {
+  animation: drift3 var(--drift-dur, 26s) ease-in-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift-0,
+  .drift-1,
+  .drift-2,
+  .drift-3 {
+    animation: none;
+    transform: scale(1.04);
+  }
+}
+
+/* Range inputs in Réglages, themed to the warm palette. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  border-radius: 999px;
+  background: #3e3f48;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--accent);
+  cursor: pointer;
+  border: 3px solid #1c1d22;
+  box-shadow: 0 0 0 1px #3e3f48;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--accent);
+  cursor: pointer;
+  border: 3px solid #1c1d22;
+}
