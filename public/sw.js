@@ -2,7 +2,7 @@
 // drift off Wi-Fi; everything but the Souffleur (which needs the network) keeps
 // working from cache. We cache the built shell on install and serve
 // network-falling-back-to-cache for navigations, cache-first for static assets.
-const CACHE = "le-galet-v1";
+const CACHE = "le-galet-v2";
 const SHELL = ["/", "/index.html", "/manifest.webmanifest", "/favicon.svg", "/icon.svg"];
 
 self.addEventListener("install", (event) => {
@@ -26,6 +26,23 @@ self.addEventListener("fetch", (event) => {
 
   // Never cache the AI endpoint — it must hit the network or fail honestly.
   if (url.pathname.startsWith("/api/")) return;
+
+  // The margin-quotes feed must stay fresh: network-first, fall back to the last
+  // cached copy when offline. (Cache-first would freeze the feed forever.)
+  if (url.pathname.endsWith("/quotes-feed.json")) {
+    event.respondWith(
+      fetch(request)
+        .then((res) => {
+          if (res.ok && url.origin === location.origin) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(request, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(request)),
+    );
+    return;
+  }
 
   // App-shell navigations: try network, fall back to cached index.
   if (request.mode === "navigate") {

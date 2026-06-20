@@ -20,7 +20,9 @@ export interface Entry {
   endAt?: number | null;
   recurrence?: Recurrence;
   active: boolean; // soft on/off without deleting
-  source?: "hand" | "souffleur"; // provenance, for the gentle AI suggestions
+  // provenance: typed by hand, kept from a Souffleur suggestion, or imported
+  // from a quote saved off a magazine's margin (Les Marges → wiki → feed).
+  source?: "hand" | "souffleur" | "margin";
   createdAt: number;
   updatedAt: number;
 }
@@ -124,6 +126,24 @@ export async function addSouffleurQuote(text: string, author: string): Promise<n
     order: await nextOrder(),
     active: true,
     source: "souffleur",
+    createdAt: now,
+    updatedAt: now,
+  });
+}
+
+// A quote imported from the magazine-margin feed (wiki/quotes → quotes-feed.json).
+// Distinct provenance so it reads differently from hand-typed lines and can be
+// filtered or weighted on its own later.
+export async function addMarginQuote(text: string, author: string): Promise<number> {
+  const now = Date.now();
+  return db.entries.add({
+    type: "quote",
+    text: text.trim(),
+    author: author.trim(),
+    weight: 1,
+    order: await nextOrder(),
+    active: true,
+    source: "margin",
     createdAt: now,
     updatedAt: now,
   });

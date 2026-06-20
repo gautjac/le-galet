@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db, DEFAULT_SETTINGS, getSettings, type Settings } from "./db";
+import { importQuoteFeed } from "./feed";
 import { LangProvider } from "./i18n";
 import Galet from "./components/Galet";
 import Composer from "./components/Composer";
@@ -25,6 +26,15 @@ export default function App() {
   useEffect(() => {
     if (settingsRow === undefined) getSettings();
   }, [settingsRow]);
+
+  // Pull margin quotes saved from the magazines (Les Marges → wiki → feed). Run
+  // once on load, then every six hours — the display can stay open for days, so
+  // it shouldn't take a reload to surface a quote saved this morning.
+  useEffect(() => {
+    importQuoteFeed();
+    const id = window.setInterval(() => importQuoteFeed(), 6 * 60 * 60 * 1000);
+    return () => window.clearInterval(id);
+  }, []);
 
   const [view, setView] = useState<View>("galet");
   const [onboarded, setOnboarded] = useState(() => {
