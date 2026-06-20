@@ -42,7 +42,20 @@ function saveSeen(seen: Set<string>): void {
   }
 }
 
-export async function importQuoteFeed(): Promise<number> {
+// Serialize imports. Without this, two overlapping calls (React StrictMode
+// double-fires the mount effect; the 6h interval could overlap a slow run) each
+// read the store before the other writes, and every quote lands twice.
+let inFlight: Promise<number> | null = null;
+
+export function importQuoteFeed(): Promise<number> {
+  if (inFlight) return inFlight;
+  inFlight = runImport().finally(() => {
+    inFlight = null;
+  });
+  return inFlight;
+}
+
+async function runImport(): Promise<number> {
   let feed: FeedItem[];
   try {
     const res = await fetch(`${import.meta.env.BASE_URL}quotes-feed.json`, { cache: "no-store" });
