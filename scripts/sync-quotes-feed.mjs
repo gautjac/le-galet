@@ -18,8 +18,10 @@
 //   the client can import only what's new and never resurrect a deleted quote:
 //     [{ "id": "a1b2c3d4", "text": "...", "author": "...", "source": "les-marges-..." }]
 //
-// Behavior: rebuild the feed from the wiki; if it changed, commit + push so
-// Netlify redeploys and the kitchen iPad picks the new quotes up on next load.
+// Behavior: rebuild the feed from the wiki; if it changed, build + deploy to
+// Netlify (this site is NOT git-linked — it publishes via the Netlify CLI from
+// .netlify/state.json — so a git push alone would never reach the iPad), then
+// commit the feed to git for version history (best-effort, non-fatal).
 //
 // Runs under launchd (com.jacquesgautreau.sync-galet-quotes), same cadence family
 // as the dashboard's sync-quotes.
@@ -118,34 +120,26 @@ try {
   writeFileSync(TARGET, next);
   log('quotes-feed.json updated');
 
-  // From here on: commit + push so Netlify redeploys. Guarded so a dirty repo
-  // (stray .DS_Store, app edits in flight) never gets swept into the commit —
-  // we only ever stage the feed file.
-  try {
-    run('git', ['pull', '--rebase', '--autostash', 'origin', 'main']);
-  } catch {
-    log('ERROR: git pull --rebase failed');
-    try { run('git', ['rebase', '--abort'], { pipe: true }); } catch {}
-    process.exit(1);
-  }
+  // Publish. The site isn't git-linked, so we build (so dist reflects current
+  // source, never a stale app) and deploy through the Netlify CLI, which reads
+  // the target site from .netlify/state.json. This is the step that reaches the
+  // iPad; everything after it is bookkeeping.
+  run('npm', ['run', 'build']);
+  run('netlify', ['deploy', '--prod', '--dir', 'dist']);
+  log('deployed feed to Netlify');
 
-  run('git', ['add', 'public/quotes-feed.json']);
+  // Archive the feed in git for version history. Best-effort — a failure here
+  // must not mask the successful deploy. Only ever stage the feed file, so a
+  // dirty tree (stray .DS_Store, app edits in flight) is never swept in.
   try {
-    run('git', ['diff', '--cached', '--quiet', '--', 'public/quotes-feed.json'], { pipe: true });
-    log('no staged changes after rebase — exiting clean');
-    process.exit(0);
-  } catch (err) {
-    if (err.status !== 1) throw err;
-  }
-
-  run('git', ['commit', '-m', `Sync quote feed (${feed.length} quotes from wiki)`]);
-  try {
-    run('git', ['push', 'origin', 'main']);
+    run('git', ['pull', '--rebase', '--autostash', 'origin', 'main'], { pipe: true });
+    run('git', ['add', 'public/quotes-feed.json'], { pipe: true });
+    run('git', ['commit', '-m', `Sync quote feed (${feed.length} quotes from wiki)`], { pipe: true });
+    run('git', ['push', 'origin', 'main'], { pipe: true });
+    log('archived feed to git');
   } catch {
-    log('ERROR: git push failed');
-    process.exit(1);
+    log('note: git archive step skipped/failed (deploy already succeeded)');
   }
-  log('pushed quote-feed sync');
 } catch (err) {
   log(`ERROR: ${err.message}`);
   process.exit(1);
