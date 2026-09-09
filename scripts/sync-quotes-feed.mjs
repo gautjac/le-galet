@@ -67,7 +67,10 @@ function parseFrontmatter(md) {
     if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
       value = value.slice(1, -1);
     }
-    fm[m[1]] = value;
+    // Unquoted YAML nulls (`author: null`, `author: ~`, `author:`) must become
+    // real nulls — otherwise the string "null" is truthy, it beats the
+    // source_publication fallback, and "null" shows up as the attribution.
+    fm[m[1]] = (value === 'null' || value === '~' || value === '') ? null : value;
   }
   return fm;
 }
@@ -119,6 +122,14 @@ try {
   mkdirSync(dirname(TARGET), { recursive: true });
   writeFileSync(TARGET, next);
   log('quotes-feed.json updated');
+
+  // The launchd agent runs with a bare PATH and a possibly pruned node_modules.
+  // A missing tsc/vite used to fail here as "sh: tsc: command not found" and
+  // the feed never reached the iPad — restore the toolchain before building.
+  if (!existsSync(join(REPO, "node_modules", ".bin", "tsc")) || !existsSync(join(REPO, "node_modules", ".bin", "vite"))) {
+    log("toolchain missing (tsc/vite) — running npm install");
+    run("npm", ["install", "--no-audit", "--no-fund"]);
+  }
 
   // Publish. The site isn't git-linked, so we build (so dist reflects current
   // source, never a stale app) and deploy through the Netlify CLI, which reads

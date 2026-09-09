@@ -26,7 +26,7 @@
   {
     "id": "a6cdbf1a",
     "text": "Enthusiasts are betting the tools mature before the bill comes due, skeptics are betting the slop accumulates faster than anyone can shovel it.",
-    "author": "null",
+    "author": "",
     "source": "added directly"
   },
   {
@@ -56,7 +56,7 @@
   {
     "id": "16dabcd4",
     "text": "Independent filmmakers keep trying to sell the land — the film itself — when what actually gets financed is the water, the ongoing audience relationship that flows from it.",
-    "author": "null",
+    "author": "",
     "source": "Jac"
   },
   {
@@ -64,6 +64,12 @@
     "text": "Je mets ma confiance dans le petit à petit, dans le 1% de mieux qu'hier.",
     "author": "From \\\"1%\\\"",
     "source": "Les Marges No. 6 — Saturday, May 9, 2026"
+  },
+  {
+    "id": "802e06f5",
+    "text": "Keep the robots out of the gym.",
+    "author": "",
+    "source": "Added by Jac"
   },
   {
     "id": "132dc397",
@@ -80,7 +86,7 @@
   {
     "id": "e36b8162",
     "text": "Making it work is engineering, making it good is design.",
-    "author": "null",
+    "author": "",
     "source": "Added by Jac"
   },
   {
@@ -88,6 +94,12 @@
     "text": "Most creativity is curation.",
     "author": "Linear, “Output isn't design”",
     "source": "Les Marges — No. 4 · 2026-05-02"
+  },
+  {
+    "id": "2654cec9",
+    "text": "Music is always for the listener, but the player is the first listener.",
+    "author": "Wynton Marsalis",
+    "source": "Added by Jac"
   },
   {
     "id": "15933a54",
@@ -122,7 +134,7 @@
   {
     "id": "0e61cb60",
     "text": "The artist’s job is taste and judgment, the machine’s is scale.",
-    "author": "null",
+    "author": "",
     "source": "Added by Jac"
   },
   {
@@ -146,7 +158,7 @@
   {
     "id": "9cfa4e1c",
     "text": "The narrowing is the craft.",
-    "author": "null",
+    "author": "",
     "source": "Added by Jac"
   },
   {
@@ -164,7 +176,7 @@
   {
     "id": "2d9f6bb1",
     "text": "Vermeer a compris que l'œil ne lit pas une texture, il lit la lumière qui s'y accroche.",
-    "author": "null",
+    "author": "",
     "source": "added by hand"
   },
   {
@@ -172,6 +184,12 @@
     "text": "Waste is a design choice.",
     "author": "David Byrne, via Kottke",
     "source": "Les Marges — No. 5 · Wednesday, May 6, 2026"
+  },
+  {
+    "id": "7f255c0b",
+    "text": "When you're on a good path: It's only a failure if you stop. It's a lesson if you keep going. When you're on a bad path: It's only a failure if you keep going. It's a lesson if you stop.",
+    "author": "",
+    "source": "Added by Jac"
   },
   {
     "id": "695ad121",
@@ -184,5 +202,17 @@
     "text": "You are no longer the user. You are the principal.",
     "author": "Sidebar",
     "source": "Les Marges No. 12 — Sat, May 30, 2026"
+  },
+  {
+    "id": "07594081",
+    "text": "You must stay drunk on writing so reality cannot destroy you.",
+    "author": "Ray Bradbury",
+    "source": "added by hand"
+  },
+  {
+    "id": "139b2bcd",
+    "text": "You read to think alongside a writer, not to become them, and the payoff is becoming more fully yourself.",
+    "author": "",
+    "source": "Added by Jac"
   }
 ]
